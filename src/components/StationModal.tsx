@@ -15,11 +15,17 @@ import {
   Share2,
   BookMarked,
   Quote,
-  Feather
+  Feather,
+  Maximize2,
+  X,
+  Layers,
+  FileText
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { StationData, PlayerProgress, Character } from '../types/game';
 import { getCharacterById } from '../data/characters';
+import { TempleIllustration } from './TempleIllustration';
+import { CharacterPortrait } from './CharacterPortrait';
 import { sounds } from '../utils/audio';
 
 interface StationModalProps {
@@ -39,6 +45,10 @@ export const StationModal: React.FC<StationModalProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState<StationStep>('overview');
   
+  // Literature work selection state
+  const [selectedWorkIndex, setSelectedWorkIndex] = useState<number>(0);
+  const [isArtworkZoomed, setIsArtworkZoomed] = useState<boolean>(false);
+
   // Observation state
   const [observeSelectedOption, setObserveSelectedOption] = useState<string | null>(null);
   const [observeSubmitted, setObserveSubmitted] = useState<boolean>(false);
@@ -119,8 +129,9 @@ export const StationModal: React.FC<StationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="bg-[#FAF7F0] border border-[#D6CEBE] rounded-xl max-w-3xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[92vh] relative">
+    <>
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+        <div className="bg-[#FAF7F0] border border-[#D6CEBE] rounded-xl max-w-3xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[92vh] relative">
         {/* Modal Top Banner */}
         <div className="bg-[#F4EDE1] border-b border-[#E5DECF] px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4 shrink-0">
           <button
@@ -258,20 +269,27 @@ export const StationModal: React.FC<StationModalProps> = ({
                 </p>
               </div>
 
-              {/* Character Motivation Dialogue */}
-              <div className="bg-[#FCFAF6] border border-[#E5DECF] rounded-lg p-4 flex items-start gap-3">
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5"
-                  style={{ backgroundColor: character.accentColor }}
+              {/* Grand Temple Illustrated Artwork with Zoom button */}
+              <div className="relative group rounded-xl overflow-hidden shadow-md border border-[#E5DECF]">
+                <TempleIllustration stationId={station.id} aspectRatio="16:9" className="w-full" />
+                <button
+                  onClick={() => setIsArtworkZoomed(true)}
+                  className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/70 hover:bg-black/85 text-white text-xs font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-all shadow-md cursor-pointer border border-white/20"
                 >
-                  <BookOpen className="w-4 h-4" />
-                </div>
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>Chiêm ngưỡng toàn cảnh</span>
+                </button>
+              </div>
+
+              {/* Character Motivation Dialogue */}
+              <div className="bg-[#FCFAF6] border border-[#E5DECF] rounded-xl p-4 flex items-start gap-3.5 shadow-xs">
+                <CharacterPortrait characterId={player.characterId} size="md" className="shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#991B1B]">
-                    Lời dẫn của {character.name}:
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#991B1B] flex items-center gap-1.5">
+                    <span>{character.name} ({character.roleTitle}):</span>
                   </div>
                   <p className="text-xs sm:text-sm text-[#44403C] font-serif leading-relaxed">
-                    “Bước chân ta đã dừng trước ngưỡng cửa {station.name}. Nơi đây từng chứng kiến những dấu mốc thiêng liêng gìn giữ cõi bờ kinh kỳ. Bạn hữu hãy đọc kỹ thư tịch và quan sát từng hiện vật cổ kính!”
+                    “Bước chân ta đã dừng trước ngưỡng cửa {station.name}. Nơi đây từng chứng kiến những dấu mốc thiêng liêng gìn giữ cõi bờ kinh kỳ Thăng Long. Bạn hữu hãy đọc kỹ thư tịch cổ, ngẫm thơ vịnh và quan sát từng hiện vật cổ kính!”
                   </p>
                 </div>
               </div>
@@ -386,210 +404,291 @@ export const StationModal: React.FC<StationModalProps> = ({
           )}
 
           {/* STEP 2: TRI THỨC NGỮ VĂN & TÁC PHẨM */}
-          {currentStep === 'literature' && (
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#B45309] uppercase tracking-wider flex items-center gap-1.5">
-                    <BookMarked className="w-4 h-4" />
-                    <span>Bước 2: Tác Phẩm & Tri Thức Ngữ Văn</span>
-                  </span>
-                  {!hasClaimedLiteraturePoints && (
-                    <button
-                      onClick={() => {
-                        sounds.playBellSuccess();
-                        setHasClaimedLiteraturePoints(true);
-                      }}
-                      className="px-3 py-1 bg-[#B45309]/10 hover:bg-[#B45309]/20 border border-[#B45309]/30 rounded text-xs font-semibold text-[#B45309] flex items-center gap-1 cursor-pointer transition-colors"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Lĩnh hội tri thức (+25 điểm)</span>
-                    </button>
-                  )}
-                  {hasClaimedLiteraturePoints && (
-                    <span className="inline-flex items-center gap-1 text-xs text-[#15803D] font-semibold">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Đã lĩnh hội (+25đ)</span>
+          {currentStep === 'literature' && (() => {
+            const worksList = station.literaryWorks && station.literaryWorks.length > 0 
+              ? station.literaryWorks 
+              : [station.literaryWork];
+            const activeWork = worksList[selectedWorkIndex] || worksList[0];
+
+            return (
+              <div className="space-y-6">
+                {/* Header */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#B45309] uppercase tracking-wider flex items-center gap-1.5">
+                      <BookMarked className="w-4 h-4" />
+                      <span>Bước 2: Tác Phẩm & Tri Thức Ngữ Văn ({worksList.length} tác phẩm)</span>
                     </span>
-                  )}
-                </div>
-                <h3 className="text-xl sm:text-2xl font-heritage font-bold text-[#1C1917]">
-                  {station.literaryWork.title}
-                </h3>
-                <div className="text-xs text-[#78716C] flex flex-wrap items-center gap-2">
-                  <span>Tác giả: <strong>{station.literaryWork.author}</strong></span>
-                  <span>·</span>
-                  <span>Thể loại: <strong className="text-[#991B1B]">{station.literaryWork.genre}</strong></span>
-                  <span>·</span>
-                  <span className="italic font-serif">{station.literaryWork.period}</span>
-                </div>
-              </div>
+                    {!hasClaimedLiteraturePoints && (
+                      <button
+                        onClick={() => {
+                          sounds.playBellSuccess();
+                          setHasClaimedLiteraturePoints(true);
+                        }}
+                        className="px-3 py-1 bg-[#B45309]/10 hover:bg-[#B45309]/20 border border-[#B45309]/30 rounded-lg text-xs font-semibold text-[#B45309] flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Lĩnh hội tri thức (+25 điểm)</span>
+                      </button>
+                    )}
+                    {hasClaimedLiteraturePoints && (
+                      <span className="inline-flex items-center gap-1 text-xs text-[#15803D] font-semibold bg-[#15803D]/10 px-2.5 py-0.5 rounded-full border border-[#15803D]/20">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Đã lĩnh hội (+25đ)</span>
+                      </span>
+                    )}
+                  </div>
 
-              {/* Famous quote highlight */}
-              {station.literaryWork.famousQuote && (
-                <div className="bg-[#FCFAF6] border-y-2 border-[#B45309]/30 py-3 px-4 text-center">
-                  <p className="text-sm sm:text-base font-serif italic text-[#78350F] leading-snug">
-                    {station.literaryWork.famousQuote}
-                  </p>
-                </div>
-              )}
+                  {/* Multi-work Selector Tabs */}
+                  <div className="flex flex-wrap gap-2 pt-1 border-b border-[#E5DECF] pb-2">
+                    {worksList.map((work, idx) => (
+                      <button
+                        key={work.id || idx}
+                        onClick={() => {
+                          sounds.playClick();
+                          setSelectedWorkIndex(idx);
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                          selectedWorkIndex === idx
+                            ? 'bg-[#991B1B] text-white shadow-xs font-semibold'
+                            : 'bg-[#FAF6EE] text-[#57534E] hover:bg-[#F2EDE1] border border-[#E5DECF]'
+                        }`}
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span className="max-w-[160px] sm:max-w-[200px] truncate">{work.title}</span>
+                      </button>
+                    ))}
+                  </div>
 
-              {/* Classical text presentation */}
-              <div className="bg-[#FCFAF6] border border-[#E5DECF] rounded-lg p-5 sm:p-6 space-y-4 shadow-xs">
-                {station.literaryWork.originalText && (
-                  <div className="bg-[#FAF6EE] p-3.5 rounded border border-[#EFE9DD] space-y-1">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#78716C]">
-                      Nguyên tác chữ Hán / Thư tịch cổ:
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-heritage font-bold text-[#1C1917]">
+                      {activeWork.title}
+                    </h3>
+                    <div className="text-xs text-[#78716C] flex flex-wrap items-center gap-2 mt-1">
+                      <span>Tác giả: <strong className="text-[#1C1917]">{activeWork.author}</strong></span>
+                      <span>·</span>
+                      <span>Thể loại: <strong className="text-[#991B1B]">{activeWork.genre}</strong></span>
+                      <span>·</span>
+                      <span className="italic font-serif">{activeWork.period}</span>
                     </div>
-                    <p className="font-serif text-sm text-[#44403C] tracking-wide leading-relaxed">
-                      {station.literaryWork.originalText}
+                  </div>
+                </div>
+
+                {/* Famous quote highlight */}
+                {activeWork.famousQuote && (
+                  <div className="bg-[#FCFAF6] border-y-2 border-[#B45309]/30 py-3.5 px-4 text-center rounded-lg shadow-2xs">
+                    <p className="text-sm sm:text-base font-serif italic text-[#78350F] leading-snug">
+                      {activeWork.famousQuote}
                     </p>
                   </div>
                 )}
 
-                <div className="space-y-1">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
-                    Bản dịch nghĩa & Diễn giải thơ văn:
+                {/* Classical text presentation */}
+                <div className="bg-[#FCFAF6] border border-[#E5DECF] rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+                  {/* Han-Nom / Classical Text */}
+                  {(activeWork.hanNomText || activeWork.originalText) && (
+                    <div className="bg-[#FAF6EE] p-4 rounded-lg border border-[#EFE9DD] space-y-1.5">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#78716C] flex items-center justify-between">
+                        <span>Nguyên tác Hán - Nôm / Thư tịch cổ:</span>
+                        <span className="text-[10px] font-mono text-[#A8A29E]">Cổ thi văn bản học</span>
+                      </div>
+                      <p className="font-serif text-sm sm:text-base text-[#44403C] tracking-wide leading-relaxed whitespace-pre-line font-medium">
+                        {activeWork.hanNomText || activeWork.originalText}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Phien Am / Pinyin */}
+                  {activeWork.pinyinOrPhienAm && (
+                    <div className="bg-[#F8F5EE] p-3.5 rounded-lg border border-[#EFE9DD] space-y-1">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#B45309]">
+                        Phiên âm chuẩn:
+                      </div>
+                      <p className="font-serif text-xs sm:text-sm text-[#57534E] leading-relaxed whitespace-pre-line italic">
+                        {activeWork.pinyinOrPhienAm}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Translated Text */}
+                  <div className="space-y-1.5">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#991B1B]">
+                      Bản dịch thơ / Dịch nghĩa đối chiếu:
+                    </div>
+                    <div className="text-sm sm:text-base text-[#1C1917] font-serif leading-relaxed whitespace-pre-line bg-white/80 p-4 rounded-lg border border-[#E5DECF] shadow-2xs">
+                      {activeWork.translatedText}
+                    </div>
                   </div>
-                  <div className="text-sm sm:text-base text-[#1C1917] font-serif leading-relaxed whitespace-pre-line bg-white/60 p-4 rounded border border-[#E5DECF]">
-                    {station.literaryWork.translatedText}
+
+                  {/* Aesthetic highlight */}
+                  {activeWork.aestheticHighlight && (
+                    <div className="bg-[#FFFDF5] p-3 rounded-lg border border-[#FDE68A] text-xs text-[#92400E] space-y-0.5">
+                      <strong className="uppercase tracking-wider text-[10px] block text-[#B45309]">Điểm nhấn thi pháp & cảm thức thẩm mỹ:</strong>
+                      <p className="leading-relaxed font-serif">{activeWork.aestheticHighlight}</p>
+                    </div>
+                  )}
+
+                  {/* Literary Analysis */}
+                  <div className="pt-3 border-t border-[#EFE9DD] space-y-1">
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#78350F]">
+                      Bình giảng văn học & Ý nghĩa lịch sử:
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                      {activeWork.analysis}
+                    </p>
+                  </div>
+
+                  <div className="text-[11px] text-[#A8A29E] font-mono">
+                    Xuất xứ tư liệu: {activeWork.source}
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#EFE9DD] space-y-1">
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#78350F]">
-                    Bình giảng văn học & Cảm hứng nghệ thuật:
+                {/* Tri thức ngữ văn & Thi pháp học */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-bold text-[#1C1917] uppercase tracking-wider flex items-center gap-1.5">
+                    <Feather className="w-4 h-4 text-[#991B1B]" />
+                    <span>Cẩm nang Tri thức Ngữ văn: {station.literatureKnowledge.genreDefinition.genreName}</span>
+                  </h4>
+
+                  {/* Genre breakdown */}
+                  <div className="bg-[#FAF6EE] border border-[#E5DECF] rounded-xl p-4 sm:p-5 space-y-3 shadow-xs">
+                    <p className="text-xs sm:text-sm text-[#44403C] leading-relaxed">
+                      {station.literatureKnowledge.genreDefinition.description}
+                    </p>
+                    <div className="pt-2.5 border-t border-[#EFE9DD] space-y-1.5">
+                      <span className="text-xs font-bold text-[#78350F]">Đặc trưng thi pháp then chốt:</span>
+                      <ul className="text-xs text-[#57534E] space-y-1 list-disc list-inside">
+                        {station.literatureKnowledge.genreDefinition.keyCharacteristics.map((char, idx) => (
+                          <li key={idx} className="leading-relaxed">{char}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
-                    {station.literaryWork.analysis}
-                  </p>
-                </div>
 
-                <div className="text-[11px] text-[#A8A29E] font-mono">
-                  Xuất xứ tư liệu: {station.literaryWork.source}
-                </div>
-              </div>
+                  {/* Deep Analysis (3 pillars: theme, structure, national spirit) */}
+                  {station.literatureKnowledge.deepAnalysis && (
+                    <div className="bg-white border border-[#E5DECF] rounded-xl p-4 sm:p-5 space-y-3 shadow-xs">
+                      <span className="text-xs font-bold text-[#991B1B] uppercase tracking-wider block">
+                        Phân tích chuyên sâu 3 bình diện tác phẩm
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div className="p-3 bg-[#FCFAF6] rounded-lg border border-[#E5DECF] space-y-1">
+                          <strong className="text-[#B45309] block uppercase text-[10px]">1. Chủ đề tư tưởng:</strong>
+                          <p className="text-[#57534E] leading-relaxed">{station.literatureKnowledge.deepAnalysis.theme}</p>
+                        </div>
+                        <div className="p-3 bg-[#FCFAF6] rounded-lg border border-[#E5DECF] space-y-1">
+                          <strong className="text-[#B45309] block uppercase text-[10px]">2. Cấu trúc nghệ thuật:</strong>
+                          <p className="text-[#57534E] leading-relaxed">{station.literatureKnowledge.deepAnalysis.artisticStructure}</p>
+                        </div>
+                        <div className="p-3 bg-[#FCFAF6] rounded-lg border border-[#E5DECF] space-y-1">
+                          <strong className="text-[#B45309] block uppercase text-[10px]">3. Hồn cốt dân tộc:</strong>
+                          <p className="text-[#57534E] leading-relaxed">{station.literatureKnowledge.deepAnalysis.nationalSpirit}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Tri thức ngữ văn & Thi pháp học */}
-              <div className="space-y-4">
-                <h4 className="text-sm font-bold text-[#1C1917] uppercase tracking-wider flex items-center gap-1.5">
-                  <Feather className="w-4 h-4 text-[#991B1B]" />
-                  <span>Cẩm nang Tri thức Ngữ văn: {station.literatureKnowledge.genreDefinition.genreName}</span>
-                </h4>
-
-                {/* Genre breakdown */}
-                <div className="bg-[#FAF6EE] border border-[#E5DECF] rounded-lg p-4 space-y-2">
-                  <p className="text-xs sm:text-sm text-[#44403C] leading-relaxed">
-                    {station.literatureKnowledge.genreDefinition.description}
-                  </p>
-                  <div className="pt-2 border-t border-[#EFE9DD] space-y-1">
-                    <span className="text-xs font-bold text-[#78350F]">Đặc trưng thi pháp then chốt:</span>
-                    <ul className="text-xs text-[#57534E] space-y-1 list-disc list-inside">
-                      {station.literatureKnowledge.genreDefinition.keyCharacteristics.map((char, idx) => (
-                        <li key={idx}>{char}</li>
+                  {/* Rhetorical Devices & Poetic Techniques */}
+                  <div className="space-y-2.5">
+                    <span className="text-xs font-bold text-[#1C1917] uppercase tracking-wider">
+                      Biện pháp tu từ & Bút pháp nghệ thuật tiêu biểu
+                    </span>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {station.literatureKnowledge.rhetoricalDevices.map((device, idx) => (
+                        <div
+                          key={idx}
+                          className="bg-white border border-[#E5DECF] rounded-lg p-3.5 space-y-1.5 shadow-2xs"
+                        >
+                          <div className="text-xs font-bold text-[#991B1B]">
+                            {device.name}
+                          </div>
+                          <div className="text-xs font-serif italic text-[#78350F] bg-[#FAF6EE] p-2 rounded border border-[#EFE9DD]">
+                            Ví dụ: “{device.example}”
+                          </div>
+                          <p className="text-xs text-[#57534E] leading-relaxed">
+                            <strong>Tác dụng thẩm mỹ:</strong> {device.effect}
+                          </p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
-                </div>
 
-                {/* Rhetorical Devices & Poetic Techniques */}
-                <div className="space-y-2.5">
-                  <span className="text-xs font-bold text-[#1C1917] uppercase tracking-wider">
-                    Biện pháp tu từ & Bút pháp nghệ thuật tiêu biểu
-                  </span>
-                  <div className="grid grid-cols-1 gap-2.5">
-                    {station.literatureKnowledge.rhetoricalDevices.map((device, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-white border border-[#E5DECF] rounded-lg p-3.5 space-y-1 shadow-2xs"
-                      >
-                        <div className="text-xs font-bold text-[#991B1B]">
-                          {device.name}
+                  {/* Classical Glossary / Hán-Việt dictionary */}
+                  <div className="space-y-2.5">
+                    <span className="text-xs font-bold text-[#1C1917] uppercase tracking-wider">
+                      Thuật ngữ Ngữ văn & Từ Hán - Việt cần nắm vững
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {station.literatureKnowledge.glossary.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="bg-[#FCFAF6] border border-[#E5DECF] rounded-lg p-3.5 space-y-1 text-xs shadow-2xs"
+                        >
+                          <div className="font-bold text-[#1C1917] flex items-center justify-between">
+                            <span>{item.term}</span>
+                            {item.hanTu && <span className="font-mono text-[#78716C] bg-white px-1.5 py-0.5 rounded border border-[#E5DECF]">{item.hanTu}</span>}
+                          </div>
+                          <p className="text-[#57534E] leading-relaxed">{item.meaning}</p>
+                          <div className="text-[11px] text-[#78350F] font-serif italic pt-1 border-t border-[#F0EBE1]">
+                            Ngữ cảnh: {item.literaryContext}
+                          </div>
                         </div>
-                        <div className="text-xs font-serif italic text-[#78350F] bg-[#FAF6EE] p-2 rounded">
-                          Ví dụ: “{device.example}”
-                        </div>
-                        <p className="text-xs text-[#57534E] leading-relaxed">
-                          <strong>Tác dụng thẩm mỹ:</strong> {device.effect}
-                        </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Classical Glossary / Hán-Việt dictionary */}
-                <div className="space-y-2.5">
-                  <span className="text-xs font-bold text-[#1C1917] uppercase tracking-wider">
-                    Thuật ngữ Ngữ văn & Từ Hán - Việt cần nắm vững
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {station.literatureKnowledge.glossary.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-[#FCFAF6] border border-[#E5DECF] rounded-lg p-3 space-y-1 text-xs"
-                      >
-                        <div className="font-bold text-[#1C1917] flex items-center justify-between">
-                          <span>{item.term}</span>
-                          {item.hanTu && <span className="font-mono text-[#78716C]">{item.hanTu}</span>}
-                        </div>
-                        <p className="text-[#57534E]">{item.meaning}</p>
-                        <div className="text-[11px] text-[#78350F] font-serif italic pt-1 border-t border-[#F0EBE1]">
-                          Ngữ cảnh: {item.literaryContext}
-                        </div>
-                      </div>
-                    ))}
+                  {/* Pedagogical Takeaway */}
+                  <div className="bg-[#F0FDF4]/80 border border-[#BBF7D0] rounded-xl p-4 text-xs text-[#166534] space-y-1 shadow-xs">
+                    <div className="font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#166534]" />
+                      <span>Đúc kết giá trị văn học & nhân văn:</span>
+                    </div>
+                    <p className="leading-relaxed">
+                      {station.literatureKnowledge.pedagogicalTakeaway}
+                    </p>
                   </div>
-                </div>
+                  {/* Step Navigation */}
+                  <div className="flex items-center justify-between pt-3 border-t border-[#F0EBE1]">
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setCurrentStep('read_story');
+                      }}
+                      className="px-4 py-2 text-xs font-medium text-[#57534E] hover:text-[#1C1917] cursor-pointer"
+                    >
+                      Quay lại đọc tích xưa
+                    </button>
 
-                {/* Pedagogical Takeaway */}
-                <div className="bg-[#F0FDF4]/70 border border-[#BBF7D0] rounded-lg p-4 text-xs text-[#166534] space-y-1">
-                  <div className="font-bold uppercase tracking-wider">
-                    Đúc kết giá trị văn học & nhân văn:
+                    <button
+                      onClick={() => {
+                        sounds.playClick();
+                        setCurrentStep('observe');
+                      }}
+                      className="px-5 py-2.5 bg-[#991B1B] hover:bg-[#821818] text-white text-xs sm:text-sm font-semibold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <span>Chuyển sang Bước 3: Quan sát hiện vật</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
                   </div>
-                  <p className="leading-relaxed">
-                    {station.literatureKnowledge.pedagogicalTakeaway}
-                  </p>
                 </div>
               </div>
+            );
+          })()}
 
-              {/* Step Navigation */}
-              <div className="flex items-center justify-between pt-3 border-t border-[#F0EBE1]">
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setCurrentStep('read_story');
-                  }}
-                  className="px-4 py-2 text-xs font-medium text-[#57534E] hover:text-[#1C1917] cursor-pointer"
-                >
-                  Quay lại đọc tích xưa
-                </button>
-
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setCurrentStep('observe');
-                  }}
-                  className="px-5 py-2.5 bg-[#991B1B] hover:bg-[#821818] text-white text-xs sm:text-sm font-semibold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <span>Chuyển sang Bước 3: Quan sát hiện vật</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 2: OBSERVE */}
+          {/* STEP 3: OBSERVE */}
           {currentStep === 'observe' && (
             <div className="space-y-6">
               <div className="space-y-1">
                 <span className="text-xs font-bold text-[#B45309] uppercase tracking-wider">
-                  Bước 2: Quan Sát Hiện Vật & Linh Khí
+                  Bước 3: Quan Sát Hiện Vật & Linh Khí
                 </span>
                 <h3 className="text-xl sm:text-2xl font-heritage font-bold text-[#1C1917]">
                   {station.observation.title}
                 </h3>
               </div>
+
+              {/* Observation Target Visual Art */}
+              <TempleIllustration stationId={station.id} aspectRatio="16:9" className="w-full h-44 sm:h-52 shadow-xs" />
 
               {/* Observation Clue Box */}
               <div className="bg-[#FAF6EE] border border-[#E5DECF] rounded-lg p-5 space-y-3">
@@ -898,5 +997,39 @@ export const StationModal: React.FC<StationModalProps> = ({
         </div>
       </div>
     </div>
-  );
+
+    {/* Full-view Artwork Lightbox */}
+    {isArtworkZoomed && (
+      <div className="fixed inset-0 z-60 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div className="relative max-w-4xl w-full bg-[#1C1917] rounded-2xl overflow-hidden border border-[#D97706]/40 shadow-2xl space-y-4 p-4 sm:p-6">
+          <div className="flex items-center justify-between border-b border-[#44403C] pb-3 text-white">
+            <div className="flex items-center gap-2">
+              <span className="seal-stamp text-xs px-2 py-0.5 text-[#F59E0B] border-[#F59E0B]">
+                {station.sealName}
+              </span>
+              <h3 className="text-lg sm:text-xl font-heritage font-bold text-[#FAF6EE]">
+                Toàn cảnh linh tích {station.name}
+              </h3>
+            </div>
+            <button
+              onClick={() => setIsArtworkZoomed(false)}
+              className="w-8 h-8 rounded-full bg-[#292524] hover:bg-[#44403C] text-[#D6CEBE] flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="rounded-xl overflow-hidden border border-[#D97706]/30 shadow-inner">
+            <TempleIllustration stationId={station.id} aspectRatio="16:9" className="w-full" />
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-[#A8A29E] gap-2 pt-1 font-serif">
+            <span>{station.address}</span>
+            <span className="text-[#F59E0B] italic">{station.architecturalFeature}</span>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+);
 };

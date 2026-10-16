@@ -16,6 +16,8 @@ import {
 import { StationData, PlayerProgress, StationStatus } from '../types/game';
 import { STATIONS } from '../data/stations';
 import { getCharacterById } from '../data/characters';
+import { TempleIllustration } from './TempleIllustration';
+import { CharacterPortrait } from './CharacterPortrait';
 import { sounds } from '../utils/audio';
 
 interface MapScreenProps {
@@ -75,13 +77,8 @@ export const MapScreen: React.FC<MapScreenProps> = ({
       <div className="bg-[#FAF6EE] border border-[#E5DECF] rounded-lg p-4 sm:p-5 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Character Dialogue */}
-          <div className="flex items-start sm:items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 shadow-xs"
-              style={{ backgroundColor: character.accentColor }}
-            >
-              <Compass className="w-5 h-5" />
-            </div>
+          <div className="flex items-start sm:items-center gap-3.5">
+            <CharacterPortrait characterId={player.characterId} size="md" className="shrink-0" />
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-[#991B1B] uppercase tracking-wider">
@@ -89,10 +86,10 @@ export const MapScreen: React.FC<MapScreenProps> = ({
                 </span>
                 <span className="text-xs text-[#78716C]">·</span>
                 <span className="text-xs text-[#78716C] font-serif italic">
-                  {isAllCompleted ? 'Đã thu thập trọn vẹn Tứ Trấn!' : 'Chọn một đền để bắt đầu'}
+                  {isAllCompleted ? 'Đã thu thập trọn vẹn Tứ Trấn!' : 'Chọn một đền trên bản đồ để bắt đầu'}
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-[#44403C] mt-0.5 font-serif">
+              <p className="text-xs sm:text-sm text-[#44403C] mt-0.5 font-serif leading-relaxed">
                 “{character.guideMotivation}”
               </p>
             </div>
@@ -440,7 +437,8 @@ export const MapScreen: React.FC<MapScreenProps> = ({
                   const st = STATIONS.find((s) => s.id === activeHoverStation);
                   if (!st) return null;
                   return (
-                    <div className="space-y-1">
+                    <div className="space-y-1.5 w-64">
+                      <TempleIllustration stationId={st.id} aspectRatio="16:9" className="w-full h-24 mb-1.5 shadow-2xs" />
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#991B1B]">
                           Trấn {st.guardianDirection}
@@ -505,6 +503,9 @@ export const MapScreen: React.FC<MapScreenProps> = ({
                     </div>
                     {getStatusBadge(status)}
                   </div>
+
+                  {/* Artwork Illustration */}
+                  <TempleIllustration stationId={station.id} aspectRatio="16:9" className="w-full shadow-xs" />
 
                   {/* Title & Deity */}
                   <div>

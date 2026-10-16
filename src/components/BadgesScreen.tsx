@@ -3,6 +3,7 @@ import { Award, CheckCircle2, Lock, Sparkles, Printer, ArrowRight, ShieldCheck }
 import { PlayerProgress } from '../types/game';
 import { ALL_BADGES, calculatePlayerRank } from '../data/stations';
 import { getCharacterById } from '../data/characters';
+import { CharacterPortrait } from './CharacterPortrait';
 import { sounds } from '../utils/audio';
 
 interface BadgesScreenProps {
@@ -41,15 +42,10 @@ export const BadgesScreen: React.FC<BadgesScreenProps> = ({
 
       {/* Player Status Overview Strip */}
       <div className="bg-[#FCFAF6] border border-[#E5DECF] rounded-lg p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 shadow-sm"
-            style={{ backgroundColor: character.accentColor }}
-          >
-            <Award className="w-6 h-6" />
-          </div>
+        <div className="flex items-center gap-3.5">
+          <CharacterPortrait characterId={player.characterId} size="md" className="shrink-0" />
           <div>
-            <div className="text-xs text-[#78716C]">Lữ khách hiện tại</div>
+            <div className="text-xs text-[#78716C]">Lữ khách đương thời</div>
             <div className="text-base font-bold text-[#1C1917]">
               {player.nickname || 'Lữ khách ẩn danh'} ({character.name})
             </div>

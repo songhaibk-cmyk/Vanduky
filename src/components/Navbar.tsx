@@ -3,6 +3,7 @@ import { Volume2, VolumeX, RotateCcw, Award, Map as MapIcon, Trophy, User, BookM
 import { AppView, PlayerProgress } from '../types/game';
 import { calculatePlayerRank } from '../data/stations';
 import { sounds } from '../utils/audio';
+import { CharacterPortrait } from './CharacterPortrait';
 
 interface NavbarProps {
   currentView: AppView;
@@ -87,13 +88,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 3: Player Info & Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Points & Station count */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-[#F2EDE1] rounded border border-[#E5DECF] text-xs font-medium text-[#44403C]">
-            <span className="tabular-nums font-semibold text-[#991B1B]">
-              {player.points}
-            </span>
-            <span className="text-[#A8A29E]">·</span>
-            <span className="text-[#78716C]">{currentRank}</span>
+          {/* Points, Character & Station count */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-[#F2EDE1] rounded-lg border border-[#E5DECF] text-xs font-medium text-[#44403C] shadow-xs">
+            <CharacterPortrait characterId={player.characterId} size="sm" className="w-6 h-6" />
+            <div className="flex items-center gap-1.5">
+              <span className="font-semibold text-[#1C1917] max-w-[90px] truncate">{player.nickname || 'Lữ khách'}</span>
+              <span className="text-[#A8A29E]">·</span>
+              <span className="tabular-nums font-bold text-[#991B1B]">{player.points}đ</span>
+            </div>
           </div>
 
           {/* Sound Toggle */}

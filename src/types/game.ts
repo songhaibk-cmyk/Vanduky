@@ -55,15 +55,19 @@ export interface StoryReading {
 }
 
 export interface LiteraryWork {
+  id?: string;
   title: string;
   author: string;
   genre: string;
   period: string;
   source: string;
   originalText?: string;
+  hanNomText?: string;
+  pinyinOrPhienAm?: string;
   translatedText: string;
   analysis: string;
   famousQuote?: string;
+  aestheticHighlight?: string;
 }
 
 export interface RhetoricalDevice {
@@ -88,6 +92,11 @@ export interface LiteratureKnowledge {
   rhetoricalDevices: RhetoricalDevice[];
   glossary: LiteraryGlossaryItem[];
   pedagogicalTakeaway: string;
+  deepAnalysis?: {
+    theme: string;
+    artisticStructure: string;
+    nationalSpirit: string;
+  };
 }
 
 export interface StationData {
@@ -111,6 +120,7 @@ export interface StationData {
   etiquetteTip: string;
   story: StoryReading;
   literaryWork: LiteraryWork;
+  literaryWorks: LiteraryWork[];
   literatureKnowledge: LiteratureKnowledge;
   observation: ObservationChallenge;
   quiz: QuizQuestion[];

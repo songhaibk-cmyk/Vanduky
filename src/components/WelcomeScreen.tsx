@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Compass, Sparkles, BookOpen, Scroll, MapPin } from 'lucide-react';
+import { CitadelHeroArt } from './CitadelHeroArt';
+import { CharacterPortrait } from './CharacterPortrait';
 import { sounds } from '../utils/audio';
 
 interface WelcomeScreenProps {
@@ -41,15 +43,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       <div className="absolute bottom-6 left-6 w-20 h-20 border-b-2 border-l-2 border-[#B45309]/30 pointer-events-none hidden sm:block" />
       <div className="absolute bottom-6 right-6 w-20 h-20 border-b-2 border-r-2 border-[#B45309]/30 pointer-events-none hidden sm:block" />
 
-      <div className="max-w-2xl w-full mx-auto space-y-8 relative z-10 text-center">
+      <div className="max-w-3xl w-full mx-auto space-y-7 relative z-10 text-center">
         {/* Seal Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#991B1B]/8 border border-[#991B1B]/30 rounded text-[#991B1B] text-xs font-semibold tracking-widest uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#991B1B]" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#991B1B]/10 border border-[#991B1B]/30 rounded-full text-[#991B1B] text-xs font-semibold tracking-widest uppercase shadow-xs">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#991B1B] animate-pulse" />
           <span>Thăng Long Cổ Đô · Di Tích Tứ Trấn</span>
         </div>
 
         {/* Title & Tagline */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heritage font-bold text-[#1C1917] tracking-tight leading-tight">
             Văn Du Kí
           </h1>
@@ -57,6 +59,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             Mở bản đồ, đọc chuyện xưa, khám phá Hà Nội
           </p>
         </div>
+
+        {/* Grand Hero Art Illustration */}
+        <CitadelHeroArt className="w-full aspect-16/7 max-h-56 shadow-md" />
 
         {/* Fictional Guide Greeting Box */}
         <div className="bg-[#FAF6EE] border border-[#E5DECF] rounded-lg p-5 sm:p-6 text-left shadow-xs relative">
@@ -83,27 +88,76 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           </div>
         </div>
 
+        {/* Four Characters Companion Preview */}
+        <div className="bg-[#FAF6EE] p-4 rounded-xl border border-[#E5DECF] space-y-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-[#991B1B] text-center">
+            Bốn nhân vật dẫn truyện độc bản
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="p-2.5 bg-white/80 rounded-lg border border-[#E5DECF] flex items-center gap-2 shadow-2xs">
+              <CharacterPortrait characterId="chep_su" size="sm" />
+              <div className="text-left">
+                <div className="text-xs font-bold text-[#1C1917]">Người chép sử</div>
+                <div className="text-[10px] text-[#78716C]">Cẩn bút di biên</div>
+              </div>
+            </div>
+            <div className="p-2.5 bg-white/80 rounded-lg border border-[#E5DECF] flex items-center gap-2 shadow-2xs">
+              <CharacterPortrait characterId="thi_si" size="sm" />
+              <div className="text-left">
+                <div className="text-xs font-bold text-[#1C1917]">Thi sĩ du hành</div>
+                <div className="text-[10px] text-[#78716C]">Đề thơ vịnh cảnh</div>
+              </div>
+            </div>
+            <div className="p-2.5 bg-white/80 rounded-lg border border-[#E5DECF] flex items-center gap-2 shadow-2xs">
+              <CharacterPortrait characterId="su_gia" size="sm" />
+              <div className="text-left">
+                <div className="text-xs font-bold text-[#1C1917]">Sứ giả</div>
+                <div className="text-[10px] text-[#78716C]">Chiếu thư cõi Nam</div>
+              </div>
+            </div>
+            <div className="p-2.5 bg-white/80 rounded-lg border border-[#E5DECF] flex items-center gap-2 shadow-2xs">
+              <CharacterPortrait characterId="ke_chuyen" size="sm" />
+              <div className="text-left">
+                <div className="text-xs font-bold text-[#1C1917]">Người kể chuyện</div>
+                <div className="text-[10px] text-[#78716C]">Huyền thoại kinh kỳ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Four Temples Micro Preview */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-left">
-          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
-            <div className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider">Trấn Đông</div>
-            <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Bạch Mã</div>
-            <div className="text-[11px] text-[#78350F] truncate font-serif">Việt điện u linh tập</div>
+          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded-xl shadow-2xs hover:border-[#D6CEBE] transition-colors">
+            <div className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider flex items-center justify-between">
+              <span>Trấn Đông</span>
+              <span className="text-[10px] font-mono text-[#A8A29E]">Hoàn Kiếm</span>
+            </div>
+            <div className="text-xs font-bold text-[#1C1917] truncate mt-0.5">Đền Bạch Mã</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif mt-0.5">Việt điện u linh tập · Thơ Đường</div>
           </div>
-          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
-            <div className="text-[11px] font-bold text-[#1E3A8A] uppercase tracking-wider">Trấn Tây</div>
-            <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Voi Phục</div>
-            <div className="text-[11px] text-[#78350F] truncate font-serif">Diễn ca anh hùng dân gian</div>
+          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded-xl shadow-2xs hover:border-[#D6CEBE] transition-colors">
+            <div className="text-[11px] font-bold text-[#1E3A8A] uppercase tracking-wider flex items-center justify-between">
+              <span>Trấn Tây</span>
+              <span className="text-[10px] font-mono text-[#A8A29E]">Ba Đình</span>
+            </div>
+            <div className="text-xs font-bold text-[#1C1917] truncate mt-0.5">Đền Voi Phục</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif mt-0.5">Diễn ca lịch sử · Nam quốc sơn hà</div>
           </div>
-          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
-            <div className="text-[11px] font-bold text-[#B45309] uppercase tracking-wider">Trấn Nam</div>
-            <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Kim Liên</div>
-            <div className="text-[11px] text-[#78350F] truncate font-serif">Văn bia Bi minh 1510</div>
+          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded-xl shadow-2xs hover:border-[#D6CEBE] transition-colors">
+            <div className="text-[11px] font-bold text-[#B45309] uppercase tracking-wider flex items-center justify-between">
+              <span>Trấn Nam</span>
+              <span className="text-[10px] font-mono text-[#A8A29E]">Đống Đa</span>
+            </div>
+            <div className="text-xs font-bold text-[#1C1917] truncate mt-0.5">Đền Kim Liên</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif mt-0.5">Văn bia 1510 · Thăng Long hoài cổ</div>
           </div>
-          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
-            <div className="text-[11px] font-bold text-[#2D4A3E] uppercase tracking-wider">Trấn Bắc</div>
-            <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Quán Thánh</div>
-            <div className="text-[11px] text-[#78350F] truncate font-serif">Thi phẩm lục bát Tây Hồ</div>
+          <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded-xl shadow-2xs hover:border-[#D6CEBE] transition-colors">
+            <div className="text-[11px] font-bold text-[#15803D] uppercase tracking-wider flex items-center justify-between">
+              <span>Trấn Bắc</span>
+              <span className="text-[10px] font-mono text-[#A8A29E]">Ba Đình</span>
+            </div>
+            <div className="text-xs font-bold text-[#1C1917] truncate mt-0.5">Đền Quán Thánh</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif mt-0.5">Ca dao Tây Hồ · Tụng Tây Hồ phú</div>
           </div>
         </div>
 
