@@ -88,22 +88,22 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
             <div className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider">Trấn Đông</div>
             <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Bạch Mã</div>
-            <div className="text-[11px] text-[#78716C] truncate">Hàng Buồm · Thần Long Đỗ</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif">Việt điện u linh tập</div>
           </div>
           <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
             <div className="text-[11px] font-bold text-[#1E3A8A] uppercase tracking-wider">Trấn Tây</div>
             <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Voi Phục</div>
-            <div className="text-[11px] text-[#78716C] truncate">Kim Mã · Hoàng tử Linh Lang</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif">Diễn ca anh hùng dân gian</div>
           </div>
           <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
             <div className="text-[11px] font-bold text-[#B45309] uppercase tracking-wider">Trấn Nam</div>
             <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Kim Liên</div>
-            <div className="text-[11px] text-[#78716C] truncate">Phương Liên · Cao Sơn Đại Vương</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif">Văn bia Bi minh 1510</div>
           </div>
           <div className="p-3 bg-[#FCFAF6] border border-[#E5DECF] rounded">
             <div className="text-[11px] font-bold text-[#2D4A3E] uppercase tracking-wider">Trấn Bắc</div>
             <div className="text-xs font-semibold text-[#1C1917] truncate">Đền Quán Thánh</div>
-            <div className="text-[11px] text-[#78716C] truncate">Hồ Tây · Huyền Thiên Trấn Vũ</div>
+            <div className="text-[11px] text-[#78350F] truncate font-serif">Thi phẩm lục bát Tây Hồ</div>
           </div>
         </div>
 

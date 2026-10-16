@@ -16,6 +16,7 @@ import { MapScreen } from './components/MapScreen';
 import { StationModal } from './components/StationModal';
 import { BadgesScreen } from './components/BadgesScreen';
 import { LeaderboardScreen } from './components/LeaderboardScreen';
+import { LiteratureLibrary } from './components/LiteratureLibrary';
 import { ResetConfirmModal } from './components/ResetConfirmModal';
 
 export default function App() {
@@ -181,6 +182,13 @@ export default function App() {
         {currentView === 'badges' && (
           <BadgesScreen
             player={player}
+            onNavigateToMap={() => setCurrentView('map')}
+          />
+        )}
+
+        {currentView === 'literature' && (
+          <LiteratureLibrary
+            onSelectStation={handleOpenStation}
             onNavigateToMap={() => setCurrentView('map')}
           />
         )}

@@ -10,7 +10,8 @@ import {
   ArrowRight,
   ShieldAlert,
   Info,
-  Award
+  Award,
+  BookOpen
 } from 'lucide-react';
 import { StationData, PlayerProgress, StationStatus } from '../types/game';
 import { STATIONS } from '../data/stations';
@@ -519,6 +520,17 @@ export const MapScreen: React.FC<MapScreenProps> = ({
                   <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed line-clamp-2">
                     {station.shortDescription}
                   </p>
+
+                  {/* Literary Work Preview */}
+                  <div className="bg-[#FAF6EE] p-2.5 rounded border border-[#EFE9DD] space-y-1">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-[#B45309] flex items-center gap-1">
+                      <BookOpen className="w-3 h-3" />
+                      <span>Tác phẩm văn học: {station.literaryWork.genre}</span>
+                    </div>
+                    <div className="text-xs font-serif font-medium text-[#1C1917] truncate">
+                      {station.literaryWork.title}
+                    </div>
+                  </div>
 
                   {/* Address & Real Coordinates */}
                   <div className="text-[11px] text-[#78716C] bg-[#FAF6EE] p-2 rounded border border-[#EFE9DD] space-y-0.5">

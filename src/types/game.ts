@@ -54,6 +54,42 @@ export interface StoryReading {
   reflectionQuestion: string;
 }
 
+export interface LiteraryWork {
+  title: string;
+  author: string;
+  genre: string;
+  period: string;
+  source: string;
+  originalText?: string;
+  translatedText: string;
+  analysis: string;
+  famousQuote?: string;
+}
+
+export interface RhetoricalDevice {
+  name: string;
+  example: string;
+  effect: string;
+}
+
+export interface LiteraryGlossaryItem {
+  term: string;
+  hanTu?: string;
+  meaning: string;
+  literaryContext: string;
+}
+
+export interface LiteratureKnowledge {
+  genreDefinition: {
+    genreName: string;
+    description: string;
+    keyCharacteristics: string[];
+  };
+  rhetoricalDevices: RhetoricalDevice[];
+  glossary: LiteraryGlossaryItem[];
+  pedagogicalTakeaway: string;
+}
+
 export interface StationData {
   id: string;
   name: string;
@@ -74,6 +110,8 @@ export interface StationData {
   architecturalFeature: string;
   etiquetteTip: string;
   story: StoryReading;
+  literaryWork: LiteraryWork;
+  literatureKnowledge: LiteratureKnowledge;
   observation: ObservationChallenge;
   quiz: QuizQuestion[];
   finalChallengePrompt: string;
@@ -110,7 +148,8 @@ export type AppView =
   | 'map'
   | 'station_detail'
   | 'badges'
-  | 'leaderboard';
+  | 'leaderboard'
+  | 'literature';
 
 export interface LeaderboardEntry {
   rank: number;

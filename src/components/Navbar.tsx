@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, RotateCcw, Award, Map as MapIcon, Trophy, User } from 'lucide-react';
+import { Volume2, VolumeX, RotateCcw, Award, Map as MapIcon, Trophy, User, BookMarked } from 'lucide-react';
 import { AppView, PlayerProgress } from '../types/game';
 import { calculatePlayerRank } from '../data/stations';
 import { sounds } from '../utils/audio';
@@ -30,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems: { view: AppView; label: string; icon: React.ReactNode }[] = [
     { view: 'map', label: 'Bản đồ Tứ Trấn', icon: <MapIcon className="w-4 h-4" /> },
+    { view: 'literature', label: 'Tủ sách Ngữ văn', icon: <BookMarked className="w-4 h-4" /> },
     { view: 'badges', label: 'Kho di sản', icon: <Award className="w-4 h-4" /> },
     { view: 'leaderboard', label: 'Bảng xếp hạng', icon: <Trophy className="w-4 h-4" /> },
     { view: 'character_select', label: 'Nhân vật', icon: <User className="w-4 h-4" /> },
