@@ -1,0 +1,6 @@
+{
+  "name": "Văn Du Kí - Thăng Long Tứ Trấn",
+  "description": "Game web nhập vai khám phá di sản Thăng Long Tứ Trấn qua bản đồ số, đọc chuyện tích xưa và giải đố văn hóa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
